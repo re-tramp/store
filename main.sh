@@ -36,8 +36,9 @@ download_app() {
     
     verify
 
-    local enable_argo=${1:-false}
-    local enable_caddy=${2:-false}
+    enable_argo=${1:-false}
+    enable_caddy=${2:-false}
+
     local xray_link=''
     local caddy_link=''
     local argo_link=''
@@ -45,12 +46,14 @@ download_app() {
 
     if [ ! -f "$XRAY_NAME" ]; then
         download "$xray_link" "$XRAY_NAME"
+        generate_config_for_xray
     else
         echo "file alread exsit !"
     fi
 
     if [ "$enable_argo" ] && [ ! -f "$CLOUDFLARED_NAME" ]; then
         download "$argo_link" "$CLOUDFLARED_NAME"
+        generate_config_for_caddy
     else
         echo "argo is disabled or exist!"
     fi
@@ -64,7 +67,7 @@ download_app() {
 
 }
 
-generate_config() {
+generate_config_for_xray() {
 
 cat > xray.json << EOF
 {
@@ -106,5 +109,24 @@ cat > xray.json << EOF
 }
 EOF
 
+
+}
+
+
+generate_config_for_caddy() {
+
+cat > Caddyfile << EOF
+
+:80
+root * $(pwd)
+file_server
+
+reverse_proxy /UUID-vmess 127.0.0.1:8880
+
+EOF
+}
+
+
+generate_config_for_argo() {
 
 }
