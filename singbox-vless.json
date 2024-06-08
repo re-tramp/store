@@ -74,7 +74,7 @@
       "tag": "vless-out",
       "server": "www.visa.com.tw",
       "server_port": 443,
-      "uuid": "0b2154b9-49a3-4634-a5d5-22d06b3a852d",
+      "uuid": "0b2154b9",
       "flow": "",
       "tls": {
         "enabled": true,
